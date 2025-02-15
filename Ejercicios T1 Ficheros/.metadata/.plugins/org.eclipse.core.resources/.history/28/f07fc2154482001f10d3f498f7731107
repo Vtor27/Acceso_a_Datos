@@ -1,0 +1,163 @@
+package Ficheros.AccesoADatos.Florida;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Date;
+import java.util.Scanner;
+
+
+public class Proyect_T1 {
+	public static void renombrar(String carpeta) {
+		Scanner scanner = new Scanner(System.in); 
+		mostrarContenido(carpeta);
+		
+		File file = new File(carpeta);
+		String[] contenidoCarpeta = file.list(); 
+		System.out.println("Selecciona el número del fichero/carpeta que desee renombrar. --> ");
+		
+		int num = scanner.nextInt();
+		File elementoRenombrar = new File(contenidoCarpeta[num - 1]);
+		System.out.println("Elige el nuevo nombre.");
+		String nuevoNombre = scanner.nextLine();
+		File newFile = new File(nuevoNombre);
+		elementoRenombrar.renameTo(newFile);
+		
+		mostrarContenido(carpeta);
+		
+	}
+	
+	public static void eliminar(String carpeta) {
+		Scanner scanner = new Scanner(System.in); 
+		mostrarContenido(carpeta);
+		File file = new File(carpeta);
+		
+		String[] contenidoCarpeta = file.list(); 
+		System.out.println("Selecciona el número del fichero/carpeta que desee eliminar. --> ");
+		
+		int num = scanner.nextInt();
+		File elementoEliminar = new File(contenidoCarpeta[num - 1]);	//SE RESTA 1 AL NÚMERO QUE DIGAMOS PARA IGUALARLO AL INDICE DEL ARRAY.
+		elementoEliminar.delete();
+		mostrarContenido(carpeta);
+	}
+	
+	public static void mostrarContenido(String carpeta) {
+		File file = new File(carpeta);
+		String[] contenidoCarpeta = file.list();
+		System.out.println("Contenido de la carpeta seleccionada: \n");
+		
+		int contador = 1;
+		for (String elementoCarpeta : contenidoCarpeta) {
+			System.out.println(contador++ + ". " + elementoCarpeta);
+		}
+	}
+	
+	
+	public static void crearFichero() {
+		Scanner scanner = new Scanner(System.in); 
+		System.out.println("Introduce el nombre que tendrá el nuevo fichero(.txt).");
+		String nameFichero = scanner.next() + ".txt";	//El archivo creado será un txt.
+
+		File ficheroNuevo = new File(nameFichero);
+		
+		if(!ficheroNuevo.exists()) {
+			try {
+				ficheroNuevo.createNewFile();
+				System.out.println("Fichero " + ficheroNuevo + " creado con exito.");
+			} catch (IOException e) {
+				System.out.println("Error al crear el fichero.");
+				e.printStackTrace();
+			}
+		}else {
+			System.out.println("Ya existe un fichero con ese nombre.");
+		}
+	}
+	
+	public static void crearCarpeta() {
+		Scanner scanner = new Scanner(System.in); 
+		System.out.println("Introduce el nombre que tendrá la nueva carpeta.");
+		String nameCarpeta = scanner.next();
+		File newCarpeta = new File(nameCarpeta);
+
+		if(!newCarpeta.exists()) {
+			newCarpeta.mkdir();
+			System.out.println("Carpeta creada con exito.");
+		}else {
+			System.out.println("La carpeta ya existe.");
+		}
+		
+	}
+	
+	public static void getInformation(String fichero) {
+		File file = new File(fichero);
+		if(file.isDirectory()) {
+			System.out.println("Tipo: Directorio.");
+		}else {
+			System.out.println("Tipo: Fichero.");
+		}
+		System.out.println("Nombre del fichero: " + file.getName());
+		System.out.println("Ruta absoluta: " + file.getAbsolutePath());
+		System.out.println("Fecha de última modificación: " + new Date(file.lastModified()));
+		if(file.isHidden() == true) {
+			System.out.println("Es un fichero oculto");
+		}
+		System.out.println("No es un fichero oculto");
+		
+		if(file.isFile()) {
+			System.out.println("Tamaño: " + file.length());
+		}else {
+			System.out.println("Elementos que contiene el directorio: " + file.list().length);	//Número de ficheros o directorios dentro de file.
+			System.out.println("Espacio total: " + file.getTotalSpace() /1024/1024/1024 + " GB.");
+			System.out.println("Espacio usado: " + (file.getTotalSpace() /1024/1024/1024 - file.getFreeSpace() /1024/1024/1024) + " GB.");
+			System.out.println("Espacio libre: " + file.getFreeSpace() /1024/1024/1024 + " GB.");
+		}
+		
+	}
+
+	public static void main(String[] args) throws IOException, InterruptedException{
+		
+		String carpeta = args[0];
+		
+		InputStreamReader inputSR = new InputStreamReader(System.in);		
+		BufferedReader br = new BufferedReader(inputSR);
+		String opcion = "0";
+		do {
+			System.out.println("Elige una de las opciones para trabajar con el fichero.");
+			System.out.println("----------");
+			System.out.println("El directorio/fichero pasado como parámetro en args[0] es -> " + carpeta);
+			System.out.println("----------");
+			
+			System.out.println("1. Información.");
+			System.out.println("2. Crear nueva carpeta.");
+			System.out.println("3. Crear nuevo fichero.");
+			System.out.println("4. Eliminar fichero/carpeta.");
+			System.out.println("5. Renombrar fichero/carpeta.");
+			System.out.println("6. Cerrar programa.");
+			
+			opcion = br.readLine();
+			
+			switch (opcion) {
+			case "1":
+				getInformation(carpeta);
+				break;
+			case "2":
+				crearCarpeta();
+				break;
+			case "3":
+				crearFichero();
+				break;
+			case "4":
+				eliminar(carpeta);
+				break;
+			case "5":
+				renombrar(carpeta);
+				break;
+			default:
+				break;
+			}
+		}while(!opcion.equals("6"));
+		
+	}
+
+}

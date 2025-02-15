@@ -1,0 +1,165 @@
+package com.Miniproyecto.MongoDB;
+
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.json.JSONObject;
+
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
+
+import static com.mongodb.client.model.Filters.*;
+
+public class App {
+	
+	static MongoCollection<Document> coleccion;
+	
+	public static void mostrarTodos() {
+		MongoCursor<Document> cursor = coleccion.find().iterator();
+		while(cursor.hasNext()) {
+			JSONObject obj = new JSONObject(cursor.next().toJson());
+			System.out.println("ID: " + obj.getString("Id") + " - TITULO: " + obj.getString("Titulo"));
+		}
+	}
+	
+	public static void mostrarLibro(String id) {
+		Bson query = eq("ID", id);
+		MongoCursor<Document> cursor = coleccion.find(query).iterator();
+		while(cursor.hasNext()) {
+			JSONObject obj = new JSONObject(cursor.next().toJson());
+			System.out.println("ID: " + obj.getString("Id"));
+			System.out.println("TITULO: " + obj.getString("Titulo"));
+			System.out.println("AUTOR: " + obj.getString("Autor"));
+			System.out.println("AÑO NACIMIENTO: " + obj.getString("Año_nacimiento"));
+			System.out.println("AÑO PUBLICACION: " + obj.getString("Año_publicacion"));
+			System.out.println("EDITORIAL: " + obj.getString("Editorial"));
+			System.out.println("Nº PAGINAS: " + obj.getString("Numero_paginas"));
+		}
+	}
+	
+	public static void crear() {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("ID: "); String id = scanner.nextLine();
+		System.out.println("TITULO: "); String titulo = scanner.nextLine();
+		System.out.println("AUTOR: "); String autor = scanner.nextLine();
+		System.out.println("AÑO NACIMIENTO: "); String año_nac = scanner.nextLine();
+		System.out.println("AÑO PUBLICACION: "); String año_pub = scanner.nextLine();
+		System.out.println("EDITORIAL: "); String editorial = scanner.nextLine();
+		System.out.println("Nº PAGINAS "); String n_pag = scanner.nextLine();
+		Document doc = new Document();
+		doc.append("Id", id);
+		doc.append("TITULO", titulo);
+		doc.append("AUTOR", autor);
+		doc.append("AÑO NACIMIENTO", año_nac);
+		doc.append("AÑO PUBLICACION", año_pub);
+		doc.append("EDITORIAL", editorial);
+		doc.append("Nº PAGINAS", n_pag);
+		coleccion.insertOne(doc);
+	}
+	
+	public static void actualizarLibro(String id) {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Introduce datos nuevos(caracter '=' para dejarlo igual)");
+		Bson query = eq("Id", id);
+		System.out.println("TITULO: ");
+		String nuevoCampo = scanner.nextLine();
+		if(!nuevoCampo.equals("=")) {
+			coleccion.updateOne(query, new Document("$set", new Document("Titulo", nuevoCampo)));
+		}
+		System.out.println("AUTOR: ");
+		nuevoCampo = scanner.nextLine();
+		if(!nuevoCampo.equals("=")) {
+			coleccion.updateOne(query, new Document("$set", new Document("Autor", nuevoCampo)));
+		}
+		System.out.println("AÑO NACIMIENTO: ");
+		nuevoCampo = scanner.nextLine();
+		if(!nuevoCampo.equals("=")) {
+			coleccion.updateOne(query, new Document("$set", new Document("Año_nacimiento", nuevoCampo)));
+		}
+		System.out.println("AÑO PUBLICACION: ");
+		nuevoCampo = scanner.nextLine();
+		if(!nuevoCampo.equals("=")) {
+			coleccion.updateOne(query, new Document("$set", new Document("Año_publicacion", nuevoCampo)));
+		}
+		System.out.println("EDITORIAL: ");
+		nuevoCampo = scanner.nextLine();
+		if(!nuevoCampo.equals("=")) {
+			coleccion.updateOne(query, new Document("$set", new Document("Editorial", nuevoCampo)));
+		}
+		System.out.println("Nº PAGINAS: ");
+		nuevoCampo = scanner.nextLine();
+		if(!nuevoCampo.equals("=")) {
+			coleccion.updateOne(query, new Document("$set", new Document("Numero_paginas", nuevoCampo)));
+		}
+	}
+	
+	public static void borrarLibro(String id) {
+		coleccion.deleteOne(eq("Id", id));
+	}
+
+	public static void main(String[] args) throws InterruptedException {
+//		Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
+//		mongoLogger.setLevel(Level.SEVERE);//e.g. or Log.Warning, etc...
+
+		MongoClient mongoClient = new MongoClient("localhost", 27017);
+		MongoDatabase dataBase = mongoClient.getDatabase("Biblioteca");
+		coleccion = dataBase.getCollection("libros");	
+		
+		Scanner scanner = new Scanner(System.in);
+		int opcion = 0;
+		String id;
+		
+		//Thread.sleep(500);
+		
+		while (opcion != 6) {
+			System.out.println("\n\n=================================================");
+			System.out.println("                 MENÚ BIBLIOTECA");
+			System.out.println("=================================================");
+			System.out.println("1. Mostrar todos los títulos de la biblioteca.");
+			System.out.println("2. Mostrar información detallada de un libro.");
+			System.out.println("3. Crear un nuevo libro.");
+			System.out.println("4. Actualizar libro.");
+			System.out.println("5. Borrar libro.");
+			System.out.println("6. Cerrar biblioteca");
+			System.out.print("\n >>> Elige una opcion: ");
+			opcion= Integer.parseInt(scanner.nextLine());
+			switch (opcion) {
+			case 1: {
+				mostrarTodos();
+				break;
+			}case 2: {
+				System.out.println(">>> Indica el número del libro a mostrar: ");
+				id = scanner.nextLine();
+				mostrarLibro(id);
+				break;
+			}case 3: {
+				crear();
+				break;
+			}case 4: {
+				System.out.println(">>> Indica el número del libro a actualizar: ");
+				id = scanner.nextLine();
+				actualizarLibro(id);
+				break;
+			}case 5: {
+				System.out.println(">>> Indica el número del libro a borrar: ");
+				id = scanner.nextLine();
+				borrarLibro(id);
+				break;
+			}case 6: {
+				System.out.println(">>> Saliendo...");
+				scanner.close();
+				mongoClient.close();
+				break;
+			}
+			default:
+				break;
+			}
+		}
+	}
+
+}

@@ -1,0 +1,5 @@
+INDEX VERSION 1.134+C:\Users\vtorg\OneDrive\Escritorio\FLORIDA\Acceso a Datos\Ejercicios_XML\.metadata\.plugins\org.eclipse.jdt.core
+4084567915.index
+3413270776.index
+4150028900.index
+1865797976.index

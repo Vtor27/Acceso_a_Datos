@@ -1,0 +1,233 @@
+package es.florida.hibernate;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.logging.LogManager;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
+
+public class Principal {
+
+	public static SessionFactory sessionFactory = conexion(); // Lo utilizo para reutilizar la conexión.
+
+	public static SessionFactory conexion() {
+		try {
+			// Desactiva todos los logs de Java Util Logging (JUL)
+			LogManager.getLogManager().reset();
+			java.util.logging.Logger.getLogger("").setLevel(java.util.logging.Level.SEVERE);
+			// Carga la configuración y crea una session factory.
+			Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
+			configuration.addResource("libros.hbm.xml");
+			ServiceRegistry registry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties())
+					.build();
+			return configuration.buildSessionFactory(registry);
+		} catch (Exception e) {
+			System.err.println("Error al inicializar Hibernate: " + e.getMessage());
+			throw e;
+		}
+	}
+
+	@SuppressWarnings("rawtypes") // No pongo los tipos de la Lista y el ArrayList.
+	public static void mostrarLibros() {
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+
+		// Recupera toda la colección de la base de datos(SELECT *)
+		System.out.println("\n --> Toda la lista de peliculas: ");
+		List listaPeliculas = new ArrayList();
+		listaPeliculas = session.createQuery("FROM Libro").list();
+
+		for (Object obj : listaPeliculas) {
+			System.out.println(obj);
+		}
+		session.getTransaction().commit();
+		session.clear();
+		session.close();
+	}
+
+	public static void buscaLibroPorId(int id) {
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		Libro libroBuscado = (Libro) session.get(Libro.class, id);
+
+		System.out.println(libroBuscado.detailsBooK());
+
+		session.getTransaction().commit();
+		session.clear();
+		session.close();
+	}
+	
+	public static void insertarNuevoLibro() {
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		Scanner scanner = new Scanner(System.in);
+		
+		System.out.println("Indica los datos del libro a intoducir: ");
+		System.out.print("Titulo: ");
+		String titulo = scanner.nextLine();
+		
+		System.out.print("Autor: ");
+		String autor = scanner.nextLine();
+		
+		System.out.print("Año de nacimiento del autor: ");
+		int año_nac_autor = scanner.nextInt();
+		scanner.nextLine();
+		
+		System.out.print("Año de publicación: ");
+		int año_publicacion = scanner.nextInt();
+		scanner.nextLine();
+		
+		System.out.print("Editorial: ");
+		String editorial = scanner.nextLine();
+		
+		System.out.print("Numero de páginas: ");
+		int numero_paginas = scanner.nextInt();
+		
+		scanner.close();
+		
+		Libro libro = new Libro(titulo, autor, año_nac_autor, año_publicacion, editorial, numero_paginas);	
+
+		session.save(libro);
+		
+		System.out.println("¡Libro introducido correctamente!");
+		
+		session.getTransaction().commit();
+		session.clear();
+		session.close();
+	}
+	
+	public static void editarLibro(int id) {
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		Scanner scanner = new Scanner(System.in);
+		Libro libro = (Libro) session.get(Libro.class, id);
+		System.out.println("Libro que se va a editar -> " + libro.toString());
+		
+		System.out.println("Indica los datos del libro a editar: ");
+		System.out.print("Titulo: ");
+		String nuevoTitulo = scanner.nextLine();
+		if(!nuevoTitulo.isEmpty()) {
+			libro.setTitulo(nuevoTitulo);
+		}
+		
+		System.out.print("Autor: ");
+		String nuevoAutor = scanner.nextLine();
+		if(!nuevoAutor.isEmpty()) {
+			libro.setAutor(nuevoAutor);
+		}
+		
+		System.out.print("Año de nacimiento del autor: ");
+		String nuevoAño_nac_autor = scanner.nextLine();
+		if(!nuevoAño_nac_autor.isEmpty()) {
+			libro.setAño_nac_autor(Integer.parseInt(nuevoAño_nac_autor));
+		}
+		
+		System.out.print("Año de publicación: ");
+		String nuevoAño_publicacion = scanner.nextLine();
+		if(!nuevoAño_publicacion.isEmpty()) {
+			libro.setAño_publicacion(Integer.parseInt(nuevoAño_publicacion));
+		}
+		
+		System.out.print("Editorial: ");
+		String nuevaEditorial = scanner.nextLine();
+		if(!nuevaEditorial.isEmpty()) {
+			libro.setEditorial(nuevaEditorial);
+		}
+		
+		System.out.print("Numero de páginas: ");
+		String nuevoNumero_paginas = scanner.nextLine();
+		if(!nuevoNumero_paginas.isEmpty()) {
+			libro.setNumero_paginas(Integer.parseInt(nuevoNumero_paginas));
+		}
+		
+		System.out.println("¡Libro actualizado!");
+		scanner.close();
+		
+		session.getTransaction().commit();
+		session.clear();
+		session.close();
+		
+	}
+	
+	public static void eliminarLibroPorId(int id) {
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		
+		Libro libroDelete = new Libro();
+		libroDelete.setId(id);
+		session.delete(libroDelete);
+	}
+
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		int respuesta;
+
+		do {
+			// Menú de selección.
+			System.out.println("-----------------------------------");
+			System.out.println("------------BIBLIOTECA-------------");
+			System.out.println("-----------------------------------");
+			System.out.println("Selecciona una opción: ");
+			System.out.println("1- Mostrar todos los libros.");
+			System.out.println("2- Mostrar detalles de un libro.");
+			System.out.println("3- Añadir libro nuevo");
+			System.out.println("4- Editar libro(Indica la id).");
+			System.out.println("5- Borrar libro(Indica su id).");
+			System.out.println("6- Salir.");
+
+			respuesta = scanner.nextInt();
+
+			switch (respuesta) {
+			case 1:
+				mostrarLibros();
+				break;
+
+			case 2:
+				System.out.println("Indica el id del libro a buscar -> ");
+				int idLibroBuscar = scanner.nextInt();
+				buscaLibroPorId(idLibroBuscar);
+				break;
+
+			case 3:
+				insertarNuevoLibro();
+				break;
+				
+			case 4:
+				System.out.println("Indica el id del libro a editar -> ");
+				int idLibroEdit = scanner.nextInt();
+				buscaLibroPorId(idLibroEdit);
+				break;
+				
+			case 5:
+				
+				break;
+
+			case 6:
+				System.out.println("Saliendo...");
+				break;
+			default:
+				break;
+			}
+		} while (respuesta != 6);
+
+		scanner.close();
+
+//		// Abre una nueva sesion de la session factory.
+//		Session session = sessionFactory.openSession();
+//		session.beginTransaction();
+//
+//		// Falta toda la logica, sacar metodo para hacer la conexion a la db
+//		// Recupera un objeto(Pelicula) de la DB por su id
+//		Libro pelicula = session.get(Libro.class, 1);
+//		System.out.println(pelicula);
+//
+//		session.getTransaction().commit();
+//		session.clear();
+//		session.close();
+	}
+}

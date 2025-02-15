@@ -1,0 +1,54 @@
+package com.Ejercicios_MongoDB.AccesoADatos;
+
+import static com.mongodb.client.model.Filters.*;
+
+import java.util.ArrayList;
+
+import org.bson.Document;
+
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
+public class Principal {
+
+	static String arrayTitulos[] = { "Bohemian Rhapsody", "Billie Jean", "Shape of You", "Blinding Lights", "Rolling in the Deep", "Smells Like Teen Spirit", "Uptown Funk", "Someone Like You" };
+	static String arrayArtistas[] = { "Queen", "Michael Jackson", "Ed Sheeran", "The Weeknd", "Adele", "Nirvana", "Mark Ronson ft. Bruno Mars", "Adele" };
+	static int arrayAños[] = { 1975, 1982, 2017, 2019, 2010, 1991, 2014, 2011 };
+	static String arrayFormatos[] = {"MP3", "MP3", "WAV", "OGG", "RAW", "MP3", "MP3", "WAV"};
+
+	public static void main(String[] args) {
+		MongoClient mongoClient = new MongoClient("localhost", 20017);	//Se crea el cliente.
+		MongoDatabase dataBase = mongoClient.getDatabase("Ejercicios_MongoDB_Canciones");	//Se crea la conexión a la base de datos.
+		MongoCollection<Document> coleccion = dataBase.getCollection("canciones");	//Se crea la colección(tabla en SQL) de las canciones.
+		
+		//Insertar un documento en la colección.
+		System.out.println("Insertar un documento...\n");
+		Document doc = new Document();
+		doc.append("titulo", arrayTitulos[0]);
+		doc.append("titulo", arrayArtistas[0]);
+		doc.append("titulo", arrayAños[0]);
+		doc.append("titulo", arrayFormatos[0]);
+		coleccion.insertOne(doc);	//Insertará una única canción a la colección, solo introducirá la primera.
+		
+		//Insertar varios documentos a la colección
+		System.out.println("Insertar varios documentos a la colección...");
+		ArrayList<Document> listaDocs = new ArrayList<Document>();
+		for (int i = 0; i < arrayTitulos.length; i++) {
+			doc = new Document();
+			doc.append("titulo", arrayTitulos[i]);
+			doc.append("titulo", arrayArtistas[i]);
+			doc.append("titulo", arrayAños[i]);
+			doc.append("titulo", arrayFormatos[i]);
+			listaDocs.add(doc);
+		}
+		coleccion.insertMany(listaDocs);
+		
+		//Obtener tamaño de la colección
+		System.out.println("\n=======================");
+		System.out.println("Tamaño de la colección: " + coleccion.count());
+		System.out.println("=======================\n");
+		
+	}
+
+}

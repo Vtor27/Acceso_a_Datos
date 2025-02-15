@@ -1,0 +1,5 @@
+package es.florida.hibernate;
+
+public class Libro {
+
+}

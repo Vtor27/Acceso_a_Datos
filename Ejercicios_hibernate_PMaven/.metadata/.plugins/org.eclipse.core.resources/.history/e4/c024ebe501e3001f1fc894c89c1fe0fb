@@ -1,0 +1,12 @@
+package es.florida.hibernate;
+
+public class Libro {
+	private int id;
+	private String titulo;
+	private String autor;
+	private int año_nac_autor;
+	private int año_publicacion;
+	private String editorial;
+	private int numero_paginas;
+	
+}

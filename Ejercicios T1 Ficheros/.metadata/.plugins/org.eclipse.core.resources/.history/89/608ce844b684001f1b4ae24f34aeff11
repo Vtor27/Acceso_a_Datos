@@ -1,0 +1,25 @@
+package Ficheros.AccesoADatos.Florida;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Controlador {
+	private Modelo modelo;
+	private Vista vista;
+	private ActionListener actionListenerañadir;
+	private String ficheroLectura, ficheroEscritura;
+
+	public Controlador(Modelo modelo, Vista vista) {
+			this.modelo = modelo;
+			this.vista = vista;
+	}
+	
+//	public void Control() {
+//			mostrarFichero(ficheroLectura, 1);
+//			actionListenerAñadir = 
+//			
+//}
+	private void mostratFichero(String fichero, int numAreaText) {
+		
+	}
+}

@@ -1,0 +1,10 @@
+INDEX VERSION 1.134+C:\Users\vtorg\OneDrive\Escritorio\FLORIDA\Acceso a Datos\Ejercicios_MongoDB\.metadata\.plugins\org.eclipse.jdt.core
+1865797976.index
+2489003567.index
+523584064.index
+3984394448.index
+1229121457.index
+892457274.index
+1096287959.index
+1376023949.index
+3413270776.index

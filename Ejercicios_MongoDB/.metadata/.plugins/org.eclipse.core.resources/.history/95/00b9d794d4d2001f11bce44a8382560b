@@ -1,0 +1,19 @@
+package com.Ejercicios_MongoDB.AccesoADatos;
+
+import static com.mongodb.client.model.Filters.*;
+
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.internal.MongoClientImpl;
+
+public class Principal {
+
+	static String arrayTitulos[] = { "Bohemian Rhapsody", "Billie Jean", "Shape of You", "Blinding Lights", "Rolling in the Deep", "Smells Like Teen Spirit", "Uptown Funk", "Someone Like You" };
+	static String arrayArtistas[] = { "Queen", "Michael Jackson", "Ed Sheeran", "The Weeknd", "Adele", "Nirvana", "Mark Ronson ft. Bruno Mars", "Adele" };
+	static int arrayAños[] = { 1975, 1982, 2017, 2019, 2010, 1991, 2014, 2011 };
+	static String arrayFormatos[] = {"MP3", "MP3", "WAV", "OGG", "RAW", "MP3", "MP3", "WAV"};
+
+	public static void main(String[] args) {
+		MongoClient mongoClient = new MongoClientImpl("localhost", 20017);
+	}
+
+}

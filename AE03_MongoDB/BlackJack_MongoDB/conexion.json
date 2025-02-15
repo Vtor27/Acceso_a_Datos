@@ -1,0 +1,9 @@
+{
+  "usuario": "VictorGonzalez",
+  "contraseña": "G7xZ9mT4qLb2JX35",
+  "ip": "localhost",
+  "puerto": "27017",
+  "db": "casino",
+  "colecciones": [
+    "users", "scores"]
+}

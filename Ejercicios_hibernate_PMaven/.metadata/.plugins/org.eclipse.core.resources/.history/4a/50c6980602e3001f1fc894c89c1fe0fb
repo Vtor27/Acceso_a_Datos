@@ -1,0 +1,39 @@
+package es.florida.hibernate;
+
+public class Libro {
+	private int id;
+	private String titulo;
+	private String autor;
+	private int año_nac_autor;
+	private int año_publicacion;
+	private String editorial;
+	private int numero_paginas;
+	
+	public Libro() {}
+	
+	public Libro(int id, String titulo, String autor, int año_nac_autor, int año_publicacion, String editorial, int numero_paginas) {
+		this.id = id;
+		this.titulo = titulo;
+		this.autor = autor;
+		this.año_nac_autor = año_nac_autor;
+		this.año_publicacion = año_publicacion;
+		this.editorial = editorial;
+		this.numero_paginas = numero_paginas;
+	}
+	
+	public Libro(String titulo, String autor, int año_nac_autor, int año_publicacion, String editorial, int numero_paginas) {
+		this.titulo = titulo;
+		this.autor = autor;
+		this.año_nac_autor = año_nac_autor;
+		this.año_publicacion = año_publicacion;
+		this.editorial = editorial;
+		this.numero_paginas = numero_paginas;
+	}
+	
+	public String getId() {
+		return id;
+		
+		
+	}
+	
+}

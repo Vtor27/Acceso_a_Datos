@@ -1,0 +1,5 @@
+INDEX VERSION 1.134+C:\Users\vtorg\OneDrive\Escritorio\FLORIDA\Acceso a Datos\Acceso-a-Datos\AE02_XML_MySQL\.metadata\.plugins\org.eclipse.jdt.core
+565964384.index
+3413270776.index
+1865797976.index
+15666118.index

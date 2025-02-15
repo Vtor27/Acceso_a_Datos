@@ -1,0 +1,7 @@
+INDEX VERSION 1.134+C:\Users\vtorg\OneDrive\Escritorio\FLORIDA\Acceso a Datos\Ejercicios T1 Ficheros\.metadata\.plugins\org.eclipse.jdt.core
+573504026.index
+3413270776.index
+974857221.index
+1865797976.index
+2156706484.index
+2735895999.index

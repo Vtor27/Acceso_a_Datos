@@ -1,0 +1,242 @@
+package Ficheros.AccesoADatos.Florida;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+import java.util.Date;
+
+public class Ejercicios_T1 {
+
+	public static void Ejercicio01(String[] args) {
+		System.out.println("Ejercicio01" + '\n'
+				+ "Realiza un programa que reciba como parámetro de entrada un directorio y lo muestre per\r\n"
+				+ "pantalla.");
+		String directorio = args[0];
+		System.out.println("Directorio: " + directorio);
+	}
+
+	public static void Ejercicio02(String[] args) {
+		System.out.println("Ejercicio02" + '\n'
+				+ "Ampliar el programa anterior para que muestre todas las características de interés del\r\n"
+				+ "directorio, tomando como referencia la información que proporciona la clase File.");
+		String directorio = args[0];
+		System.out.println("Directorio: " + directorio);
+
+		File file = new File(directorio);
+
+		System.out.println("Es ejecutable? " + file.canExecute());
+		System.out.println("Se puede leer? " + file.canRead());
+		System.out.println("Se puede escribir? " + file.canWrite());
+		System.out.println("Ruta absoluta -> " + file.getAbsolutePath());
+		System.out.println("Espacio libre? ->" + file.getFreeSpace() / 1024 / 1024 / 1024 + " GB"); /// 1024/1024/1024
+																									/// esto se hace
+																									/// para pasarlo a
+																									/// GB.
+		System.out.println("Espacio toal? -> " + file.getTotalSpace() / 1024 / 1024 / 1024 + " GB");
+		System.out.println("Padre -> " + file.getParent());
+		System.out.println("Nombre -> " + file.getName());
+		System.out.println("Absoluto -> " + file.isAbsolute());
+		System.out.println("Es un directorio? -> " + file.isDirectory());
+		System.out.println("Es un fichero? -> " + file.isFile());
+		System.out.println("Ultima modificacion (en ms desde 1/1/1970) -> " + file.lastModified());
+		System.out.println("Eltima modificación -> " + new Date(file.lastModified()));
+		System.out.println("Contenido del fichero: ");
+
+		String[] lista = file.list();
+		for (String linea : lista) {
+			System.out.println(linea); // Muestra los archivos que hay en el fichero.
+		}
+	}
+
+	public static void Ejercicio03(String[] args) {
+		System.out.println("Ejercicio02" + '\n'
+				+ "Ampliar el programa anterior para que muestre todas las características de interés del\r\n"
+				+ "directorio, tomando como referencia la información que proporciona la clase File.");
+		String directorio = args[0];
+		System.out.println("Directorio: " + directorio);
+
+		File file = new File(directorio);
+		if (file.exists()) {
+			System.out.println("Es ejecutable? " + file.canExecute());
+			System.out.println("Se puede leer? " + file.canRead());
+			System.out.println("Se puede escribir? " + file.canWrite());
+			System.out.println("Ruta absoluta -> " + file.getAbsolutePath());
+			System.out.println("Espacio libre? ->" + file.getFreeSpace() / 1024 / 1024 / 1024 + " GB"); /// 1024/1024/1024
+																										/// esto se hace
+																										/// para pasarlo
+																										/// a GB.
+			System.out.println("Espacio toal? -> " + file.getTotalSpace() / 1024 / 1024 / 1024 + " GB");
+			System.out.println("Padre -> " + file.getParent());
+			System.out.println("Nombre -> " + file.getName());
+			System.out.println("Absoluto -> " + file.isAbsolute());
+			System.out.println("Es un directorio? -> " + file.isDirectory());
+			System.out.println("Es un fichero? -> " + file.isFile());
+			System.out.println("Ultima modificacion (en ms desde 1/1/1970) -> " + file.lastModified());
+			System.out.println("Eltima modificación -> " + new Date(file.lastModified()));
+			System.out.println("Contenido del fichero: ");
+
+			String[] lista = file.list();
+			for (String linea : lista) {
+				System.out.println(linea); // Muestra los archivos que hay en el fichero.
+			}
+		}
+	}
+
+	public static void Ejercicio04(String[] args) {
+		System.out.println("Realizar un programa que, dado un directorio, compruebe si existe y devuelva un mensaje\r\n"
+				+ "de confirmación si existe o una alerta en caso contrario.");
+
+		String directorio = args[0];
+		System.out.println("Directorio: " + directorio);
+
+		File file = new File(directorio);
+		if (file.exists()) {
+			System.out.println("El directorio indicado SI existe.");
+		} else {
+			System.out.println("El directorio NO existe.");
+		}
+	}
+
+	public static void Ejercicio05(String[] args) {
+		System.out.println("Realiza un programa que reciba como parámetros de entrada un directorio y una extensión\r\n"
+				+ "de fichero (por ejemplo .txt) y devuelva por pantalla todos los ficheros del directorio que\r\n"
+				+ "cumplan el criterio.");
+
+		String directorio = args[0];
+		System.out.println("Directorio: " + directorio);
+
+		File file = new File(directorio);
+		FiltroExtension filtro = new FiltroExtension(args[1]);
+		String[] lista = file.list(filtro);
+
+		for (String string : lista) {
+			System.out.println(string);
+		}
+	}
+
+	public static void Ejercicio06(String[] args) {
+		System.out.println("Modifica el programa anterior para que tenga en cuenta que, si no se le pasa ninguna\r\n"
+				+ "extensión como parámetro, muestre todo el contenido del directorio");
+
+		String directorio = args[0];
+		System.out.println("Directorio: " + directorio);
+
+		File file = new File(directorio);
+		if (args.length > 1) {
+			FiltroExtension filtro = new FiltroExtension(args[1]);
+			String[] lista = file.list(filtro);
+
+			for (String string : lista) {
+				System.out.println(string);
+			}
+		} else {
+			System.out.println("Se muestran todos los archivos.");
+			String[] lista = file.list();
+			for (String string : lista) {
+				System.out.println(string);
+			}
+		}
+	}
+
+	public static void Ejercicio07(String[] args) {
+		System.out.println("Modifica el programa anterior para que admita como parámetros de entrada un nombre\r\n"
+				+ "cualquiera de extensiones, devolviendo después por pantalla todos los ficheros del\r\n"
+				+ "directorio que tengan alguna de las extensiones indicadas.");
+
+		String directorio = args[0];
+		System.out.println("Directorio: " + directorio);
+
+		File file = new File(directorio);
+		int numextensiones = args.length - 1; // El indice 0 indica el directorio donde estamos mirando.
+
+		for (int i = 1; i < numextensiones; i++) { // Empezamos a iterar las extensiones a partir del indice 1 y no el
+													// 0.
+			FiltroExtension filtro = new FiltroExtension(args[i]); // Va filtrando los archivos según la extensión.
+			String[] lista = file.list(filtro);
+			for (String string : lista) {
+				System.out.println(string);
+			}
+		}
+	}
+
+	public static void Ejercicio08(String[] args) throws IOException{
+		System.out.println("Desarrolla un programa que, dado un fichero, realice una copia del mismo (en el mismo\r\n"
+				+ "directorio y cambiándole el nombre) y lo borre después. Muestra una traza por pantalla de\r\n"
+				+ "las acciones para ver que se realizan.");
+
+		String nombreFichero = args[0];
+		System.out.println("Nombre del fichero: " + nombreFichero);
+		int posicionPunto = nombreFichero.indexOf(".");
+
+		String nombreFicheroSinExt = nombreFichero.substring(0, posicionPunto);
+		String extension = nombreFichero.substring(posicionPunto);
+		String nombreFicheroCopia = nombreFicheroSinExt + "-copia-" + extension;
+		System.out.println("Fichero copiado: " + nombreFicheroCopia);
+
+		File ficheroOriginal = new File(nombreFichero);
+		File ficheroCopia = new File(nombreFicheroCopia);
+		
+		FileReader fr = new FileReader(ficheroOriginal);
+		BufferedReader br = new BufferedReader(fr);
+
+		FileWriter fw = new FileWriter(ficheroCopia);
+		BufferedWriter bw = new BufferedWriter(fw);
+
+		String linea = br.readLine();
+		while (linea != null) {
+			System.out.println("Copiando \"" + linea + "\" de " + nombreFichero + " a " + nombreFicheroCopia);
+			bw.write(linea);
+			linea=br.readLine();
+		}
+		br.close();
+		bw.close();
+		fr.close();
+		fw.close();
+		
+		System.out.println("Borrando fichero " + nombreFicheroCopia);
+		ficheroCopia.delete();
+	}
+
+	public static void main(String[] args) throws IOException {
+		Scanner pedirNumero = new Scanner(System.in);
+
+		System.out.print("Elige el numero de ejercicio. --> ");
+		int numEjercicio = pedirNumero.nextInt();
+
+		switch (numEjercicio) {
+		case 1:
+			Ejercicio01(args);
+			break;
+		case 2:
+			Ejercicio02(args);
+			break;
+		case 3:
+			Ejercicio03(args);
+			break;
+		case 4:
+			Ejercicio04(args);
+			break;
+		case 5:
+			Ejercicio05(args);
+			break;
+		case 6:
+			Ejercicio06(args);
+			break;
+		case 7:
+			Ejercicio07(args);
+			break;
+		case 8:
+			Ejercicio08(args);
+			break;
+
+		default:
+			break;
+		}
+		pedirNumero.close();
+	}
+
+}

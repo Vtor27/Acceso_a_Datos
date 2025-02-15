@@ -1,0 +1,6 @@
+package Ficheros.AccesoADatos.Florida;
+
+public class Modelo {
+	private String fichero_lectura;
+	private String fichero_escritura;
+}

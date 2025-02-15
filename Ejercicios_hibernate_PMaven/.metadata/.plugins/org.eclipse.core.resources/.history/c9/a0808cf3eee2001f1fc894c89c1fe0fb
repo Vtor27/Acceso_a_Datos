@@ -1,0 +1,68 @@
+package es.florida.hibernate;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Query;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.service.ServiceRegistry;
+import org.hibernate.cfg.Configuration;
+
+public class Principal {
+
+	public static void main(String[] args) {
+		// Carga la configuración y crea una session factory.
+		Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
+		configuration.addResource("peliculas.hbm.xml");
+		ServiceRegistry registry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties())
+				.build();
+		SessionFactory sessionFactory = configuration.buildSessionFactory(registry);
+
+		// Abre una nueva sesion de la session factory.
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+
+//		//Recupera toda la colección de la base de datos(SELECT *)
+//		System.out.println("--> Toda la lista de peliculas: ");
+//		List<String> listaPeliculas = new ArrayList<String>();
+//		listaPeliculas = session.createQuery("FROM Pelicula").list();
+//
+//		for (Object obj : listaPeliculas) {
+//			System.out.println(obj);
+//		}
+
+//		// Recupera un objeto(Pelicula) de la DB por su id
+//		Pelicula pelicula = (Pelicula) session.get(Pelicula.class, 1);
+//		System.out.println(pelicula);
+		
+		//Crear un nuevo objeto que se insertará en la dataBase
+//		Pelicula pelicula = new Pelicula("Avatar", "James Cameron", 7.2, "Ciencia Ficción");	PRUEBA
+//		Pelicula pelicula = new Pelicula("Interestellar", "Christofer Nollan", 7.9, "Ciencia Ficción");
+//		session.save(pelicula);
+		
+		//Modifica un objeto de la dataBase
+//		Pelicula peliculaEdit = (Pelicula) session.load(Pelicula.class, 12);
+//		peliculaEdit.setPuntuacion(8.5);
+//		peliculaEdit.setGenero("Aventuras");
+		
+		//Borra un objeto de la dataBase.
+//		Pelicula peliculaDelete = new Pelicula();
+//		peliculaDelete.setId(1);
+//		session.delete(peliculaDelete);
+
+		//Borra todas las peliculas de la dataBase.
+		Query queryDelete = session.createQuery("DELETE from peliculas");
+		queryDelete.executeUpdate();
+		
+
+		// Commit de la transacción. Limpieza de identificadores y cierra la session.
+		session.getTransaction().commit();
+		session.clear();
+		session.close();
+
+	}
+
+}

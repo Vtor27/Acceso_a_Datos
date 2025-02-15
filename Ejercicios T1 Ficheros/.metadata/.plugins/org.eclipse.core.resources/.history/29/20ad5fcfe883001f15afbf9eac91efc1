@@ -1,0 +1,27 @@
+package Ficheros.AccesoADatos.Florida;
+
+import java.util.ArrayList;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+public class Modelo {
+	private String fichero_lectura;
+	private String fichero_escritura;
+
+	public Modelo() {
+		fichero_lectura = "Fichero que utilice para LEER.";
+		fichero_escritura = "Fichero que utilice para ESCRIBIR.";
+	}
+	
+	public ArrayList<String> contenidoFichero(String fichero){
+		ArrayList<String> contenidoFichero = new ArrayList<String>();
+		
+		File file = new File(fichero);
+		try {
+			
+		}catch(Exception e) {
+			JOptionPane.showMessageDialog(new JFrame(), e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+}
